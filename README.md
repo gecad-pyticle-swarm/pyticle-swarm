@@ -20,7 +20,7 @@ To activate the anaconda environment execute:
 
 To install the library simply run:
 
-    $ pip install pso
+    $ pip install pyticle-swarm
 
 
 To try the example given:
