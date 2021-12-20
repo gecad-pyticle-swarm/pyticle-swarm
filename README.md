@@ -33,6 +33,6 @@ Pyticle Swarm was developed at GECAD - Research Group on Intelligent Engineering
 * Tiago Pinto - tcp@isep.ipp.pt
 * Zita Vale - zav@isep.ipp.pt
 
-![gecad.png](gecad.png)
+![gecad.png](https://github.com/gecad-pyticle-swarm/pyticle-swarm/raw/master/gecad.png)
 
 
