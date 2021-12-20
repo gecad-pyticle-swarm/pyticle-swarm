@@ -153,4 +153,4 @@ def run_pso(n_vars, fitness_function, low_bounds, up_bounds, initial_solution=[]
 
     n = np.argmin(fitness_value)
     print(f"Best fitness value is {fitness_value[n]} with solution {solution[n]} found in run {n+1}")
-    return Res(fitness_value[n], it_fitness_value[n], solution[n], exec_times[n])
+    return Res(fitness_value[n], it_fitness_value, solution[n], exec_times[n])

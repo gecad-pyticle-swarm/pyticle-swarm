@@ -12,12 +12,12 @@ import numpy as np
 
 # Define fitness function
 def func(x):
-    # sphere function
+    # hypersphere function
     f = np.sum(x**2)
 
     return f
 # or a benchmark can also be used
-# func = bf.Rastrigin(n_dimensions=2)
+#func = bf.Hypersphere(n_dimensions=2)
 
 # Create variables
 n_vars= 2

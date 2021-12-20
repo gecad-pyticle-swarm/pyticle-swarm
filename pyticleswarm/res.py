@@ -5,8 +5,8 @@ class Res:
     Attributes:
         fitness_value: float
             The best fitness value after running the PSO algorithm
-        it_fitness_value: array of floats
-            All the fitness values of the best execution after running the PSO algorithm
+        it_fitness_value: matrix
+            All the fitness values of each execution after running the PSO algorithm
         solution: array of floats
             The solution of the best execution corresponding to the best fitness value
         exec_time: float
@@ -18,8 +18,8 @@ class Res:
         Parameters:
             fitness_value: float
                 The best fitness value after running the PSO algorithm
-            it_fitness_value: array of floats
-                All the fitness values of the best execution after running the PSO algorithm
+            it_fitness_value: matrix
+                All the fitness values of each execution after running the PSO algorithm
             solution: array of floats
                 The solution of the best execution corresponding to the best fitness value
             exec_time: float

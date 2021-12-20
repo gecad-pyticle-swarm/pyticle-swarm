@@ -9,7 +9,9 @@ import warnings
 #Algorithm Functions
 def generat_int_pop(n_particles,n_vars,low_bounds,up_bounds):
     """
-    Generate initial population function
+    Generate initial population function.
+    Here, random values between the lower and the higer bounds are defined for the initial population:
+    x1^j = rand[xlb^j, xub^j]
 
     Parameters:
         n_particles: int
@@ -31,7 +33,8 @@ def generat_int_pop(n_particles,n_vars,low_bounds,up_bounds):
 
 def inertia_update(iteration,n_iterations,wmin,wmax):
     """
-    Inertia update function
+    Time varying acceleration inertia:
+    w^k = wmax - (wmax - wmin)/kmax * k
 
     Parameters:
         iteration: int
