@@ -32,21 +32,21 @@ up_bounds = 5.12
 """ 
 Stantard parameters values:
 
-initial_solution        = []
-brm_function            = 4
-direct_repair           = None
-perc_repair             = 0
-wmax                    = 0.5
-wmin                    = 0.1
-c1min                   = 0
-c1max                   = 0.4
-c2min                   = 0.1
-c2max                   = 2
-n_iterations            = 100
-n_particles             = 10
-n_runs                  = 30
-show_fitness_graphic    = False
-show_particle_graphics  = False
+initial_solution        = []    Matrix or array containing the initial solutions or solution
+brm_function            = 4     Function to handle boundary constraint violation.
+direct_repair           = None  The direct repair function
+perc_repair             = 0     Value between 0 and 1 that determines the percentage of iterations starting from the end where a repair function is applied
+wmax                    = 0.5   The maximum value of the inertia weight
+wmin                    = 0.1   The minimum value of the itertia weight
+c1min                   = 0     Minimum value of the acceleration coefficient c1
+c1max                   = 0.4   Maximum value of the acceleration coefficient c1
+c2min                   = 0.1   Minimum value of the acceleration coefficient c2
+c2max                   = 2     Maximum value of the acceleration coefficient c1 
+n_iterations            = 100   The total number of iterations
+n_particles             = 10    The total number of particles
+n_trials                = 30    The total number of trials
+show_fitness_graphic    = False Boolean that indicates if the fitness graphic is to be shown or not
+show_particle_graphics  = False Boolean that indicates if the particles graphics are to be shown or not (Only works with solutions of 2 dimensions)
 """
 
 # Run PSO

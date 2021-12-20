@@ -8,7 +8,7 @@ import time
 
 def run_pso(n_vars, fitness_function, low_bounds, up_bounds, initial_solution=[],brm_function = 4,direct_repair=None,
             perc_repair=0,wmax = 0.5,wmin = 0.1,c1min = 0,c1max = 0.4,c2min = 0.1,c2max = 2,n_iterations = 100,
-            n_particles = 10,n_runs = 30, show_fitness_grapic=False, show_particle_graphics=False, verbose=True):
+            n_particles = 10,n_trials = 30, show_fitness_grapic=False, show_particle_graphics=False, verbose=True):
     """
     Function to execute the pso algorithm
 
@@ -50,6 +50,8 @@ def run_pso(n_vars, fitness_function, low_bounds, up_bounds, initial_solution=[]
             The total number of iterations
         n_particles: int
             The total number of particles
+        n_trials: int
+            The total number of trials
         show_fitness_graphic: bol
             Boolean that indicates if the fitness graphic is to be shown or not
         show_particles_graphics: bol
@@ -71,8 +73,8 @@ def run_pso(n_vars, fitness_function, low_bounds, up_bounds, initial_solution=[]
     if n_particles < 1:
         raise ValueError("n_particles must at least be 1")
 
-    if n_runs < 1:
-        raise ValueError("n_runs must be at least be 1")
+    if n_trials < 1:
+        raise ValueError("n_trials must be at least be 1")
 
     if c1min < 0:
         raise ValueError("c1min must at least be 0")
@@ -125,12 +127,12 @@ def run_pso(n_vars, fitness_function, low_bounds, up_bounds, initial_solution=[]
     
     low_bounds = np.matlib.repmat(low_bounds,n_particles,1)
     up_bounds = np.matlib.repmat(up_bounds,n_particles,1)
-    fitness_value    = np.array([float('inf') for _ in range(n_runs)])
-    it_fitness_value = np.array([[float('inf') for _ in range(n_iterations)] for _ in range(n_runs)])
-    solution         = np.array([[float('inf') for _ in range(n_vars)] for _ in range(n_runs)])
-    exec_times       = np.array([float('inf') for _ in range(n_runs)])
+    fitness_value    = np.array([float('inf') for _ in range(n_trials)])
+    it_fitness_value = np.array([[float('inf') for _ in range(n_iterations)] for _ in range(n_trials)])
+    solution         = np.array([[float('inf') for _ in range(n_vars)] for _ in range(n_trials)])
+    exec_times       = np.array([float('inf') for _ in range(n_trials)])
 
-    for nr in range(n_runs):
+    for nr in range(n_trials):
         i_time = time.time()
         fitness_value[nr],it_fitness_value[nr],solution[nr] =PSO_alg(wmax,wmin,c1min,c1max,c2min,c2max,initial_solution,
                             brm_function,perc_repair,n_iterations,n_particles,n_vars,
