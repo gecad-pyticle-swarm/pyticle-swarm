@@ -11,11 +11,11 @@ with open(path.join(HERE, 'README.md'), encoding='utf-8') as f:
 
 setup(
     name="Pyticle-Swarm",
-    version="1.0.0",
+    version="1.0.2",
     description="PSO library",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://pyticleswarm.readthedocs.io/",
+    url="https://pyticle-swarm.readthedocs.io/",
     author="Bruno Veiga, Ricardo Faia, Tiago Pinto, Zita Vale",
     author_email="btsve@isep.ipp.com, rfmfa@isep.ipp.pt, tcp@isep.ipp.pt, zav@isep.ipp.pt",
     license="BSD 3-Clause",

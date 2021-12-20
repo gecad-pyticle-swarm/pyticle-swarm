@@ -11,6 +11,7 @@ def generat_int_pop(n_particles,n_vars,low_bounds,up_bounds):
     """
     Generate initial population function.
     Here, random values between the lower and the higer bounds are defined for the initial population:
+    
     x1^j = rand[xlb^j, xub^j]
 
     Parameters:
@@ -34,6 +35,7 @@ def generat_int_pop(n_particles,n_vars,low_bounds,up_bounds):
 def inertia_update(iteration,n_iterations,wmin,wmax):
     """
     Time varying acceleration inertia:
+    
     w^k = wmax - (wmax - wmin)/kmax * k
 
     Parameters:
@@ -111,6 +113,7 @@ def BRM_control_bounce_back(new_position,low_bounds,up_bounds):
     """
     Bondary control function (Bounce back)
     Relocates the parameter in between the bound it exceeded and the corresponding parameter from the base vector [1].
+    
     [1] K. Price, R. Storn, and J. Lampinen, Differential Evolution—A Practical Approach to Global Optimization. Berlin, Germany: Springer, 2005.
     
     Parameters:
@@ -135,7 +138,9 @@ def BRM_control_random_reinitialization(new_position,low_bounds,up_bounds):
     """
     Bondary control function (Random Reinicialization).
     Replaces a parameter that exceeds its bounds by a randomly chosen value from within the allowed range following [2], [1].
+    
     [1] K. Price, R. Storn, and J. Lampinen, Differential Evolution—A Practical Approach to Global Optimization. Berlin, Germany: Springer, 2005.
+    
     [2] J. Lampinen and I. Zelinka, “Mixed integer-discrete-continuous optimization with differential evolution,” in Proc. 5th Int. Mendel Conf. Soft Comput., Jun. 1999, pp. 71–76.
 
     Parameters:
@@ -162,6 +167,7 @@ def BRM_control_brick_wall_penalty(new_position,low_bounds,up_bounds):
     """
     Bondary control function (Brick wall penalty).
     If any parameter of a vector falls beyond the pre-defined lower or upper bounds, objective function value of the vector is made high enough (by afixed big number) to guarantee that it never gets selected [1].
+    
     [1] K. Price, R. Storn, and J. Lampinen, Differential Evolution—A Practical Approach to Global Optimization. Berlin, Germany: Springer, 2005.
 
     Parameters:
@@ -187,7 +193,9 @@ def BRM_control_adaptive_penalty(new_position,low_bounds,up_bounds):
     """
     Bondary control function (Brick wall penalty)
     Similar to brick wall penalty, but here the increase in the objective function value of the offender vector may depend on the number of parameters violating bound constraints and their magnitudes of violation [3], [4].
+    
     [3] R. Storn, “Differential evolution design of an IIR-filter with requirements for magnitude and group delay,” in Proc. IEEE Int. Conf. Evol. Comput., 1996, pp. 268–273.
+    
     [4] R. Storn, “On the usage of differential evolution for function optimization,” in Proc. North Am. Fuzzy Inform. Process. Soc., 1996, pp.
     
     Parameters:
