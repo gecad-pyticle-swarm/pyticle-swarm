@@ -28,10 +28,17 @@ To install the library simply run:
 
 .. code-block:: console
 
-    $ pip install pso
+    $ pip install pyticle-swarm
 
+To import the library and the PSO algorithm:
 
-To try the example given:
+.. code-block:: python
+
+    from pyticleswarm import run_pso
+
+To try the example given in github_:
+
+.. _github: https://github.com/gecad-pyticle-swarm/pyticle-swarm
     
 .. code-block:: console
 
