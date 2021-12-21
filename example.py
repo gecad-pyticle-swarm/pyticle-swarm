@@ -50,8 +50,8 @@ show_particle_graphics  = False Boolean that indicates if the particles graphics
 """
 
 # Run PSO
-res = run_pso(n_vars, fitness_function=func, low_bounds=low_bounds, up_bounds= up_bounds, c1min = 0.4, c1max = 1, c2min = 0.3, 
-            c2max = 0.4, wmax = 0.3, wmin = 0.1, brm_function=1, show_fitness_grapic=True)
+res = run_pso(n_vars, fitness_function=func, low_bounds=low_bounds, up_bounds= up_bounds, c1min = 0.4, c1max = 0.6, c2min = 0.4, 
+            c2max = 0.6, wmax = 0.6, wmin = 0.4, n_iterations=100,n_particles=100, brm_function=4, show_fitness_grapic=True)
 
 # Print results
 """
@@ -62,6 +62,4 @@ res.it_fitness_value is a array with all the fitness values of the best executio
 res.solution is the solution correspoding to best fitness value with size = n_vars
 res.exec_times is the time of execution of the algorithm for best execution with size = 1 
 """
-print("Best fitness value: " + str(res.fitness_value))
-print("Solution: " + str(res.solution))
-print("Execution time: " + str(res.exec_times))
+

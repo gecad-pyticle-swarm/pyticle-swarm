@@ -139,7 +139,7 @@ def run_pso(n_vars, fitness_function, low_bounds, up_bounds, initial_solution=[]
                             up_bounds,low_bounds,fitness_function, direct_repair, show_particle_graphics)
         exec_times[nr] = time.time() - i_time
         if verbose:
-            print("Number of trial =", nr+1, "... Fitness Value = ", fitness_value[nr],"... Execution Time = ", exec_times[nr])
+            print("Number of trial =", nr+1, "... Fitness Value = ", fitness_value[nr])
         if show_particle_graphics:
             if len(solution[nr]) == 2:
                 plt.show()
@@ -154,5 +154,10 @@ def run_pso(n_vars, fitness_function, low_bounds, up_bounds, initial_solution=[]
         plt.show()
 
     n = np.argmin(fitness_value)
-    print(f"Best fitness value is {fitness_value[n]} with solution {solution[n]} found in run {n+1}")
+    if verbose:
+        print(f"Best fitness value is {fitness_value[n]} found in run {n+1}")
+        print(f"Average fitness_value: {np.mean(fitness_value)}")
+        print(f"Standard deviation: {np.std(fitness_value)}")
+        print(f"Execution time: {np.sum(exec_times)}")
+        print(f"Solution: {solution[n]}")
     return Res(fitness_value[n], it_fitness_value, solution[n], exec_times[n])
