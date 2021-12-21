@@ -1,9 +1,11 @@
+from multiprocessing.pool import ApplyResult
 import numpy as np 
 import matplotlib.pyplot as plt
 import numpy.matlib
 from .res import Res
 from .PSO import PSO_alg
 import time
+import multiprocessing as mp
 
 
 def run_pso(n_vars, fitness_function, low_bounds, up_bounds, initial_solution=[],brm_function = 4,direct_repair=None,
@@ -131,18 +133,31 @@ def run_pso(n_vars, fitness_function, low_bounds, up_bounds, initial_solution=[]
     it_fitness_value = np.array([[float('inf') for _ in range(n_iterations)] for _ in range(n_trials)])
     solution         = np.array([[float('inf') for _ in range(n_vars)] for _ in range(n_trials)])
     exec_times       = np.array([float('inf') for _ in range(n_trials)])
-
-    for nr in range(n_trials):
-        i_time = time.time()
-        fitness_value[nr],it_fitness_value[nr],solution[nr] =PSO_alg(wmax,wmin,c1min,c1max,c2min,c2max,initial_solution,
-                            brm_function,perc_repair,n_iterations,n_particles,n_vars,
-                            up_bounds,low_bounds,fitness_function, direct_repair, show_particle_graphics)
-        exec_times[nr] = time.time() - i_time
-        if verbose:
-            print("Number of trial =", nr+1, "... Fitness Value = ", fitness_value[nr])
-        if show_particle_graphics:
-            if len(solution[nr]) == 2:
-                plt.show()
+    if show_particle_graphics and n_vars==2:
+        for nr in range(n_trials):
+            i_time = time.time()
+            fitness_value[nr],it_fitness_value[nr],solution[nr] =PSO_alg(wmax,wmin,c1min,c1max,c2min,c2max,initial_solution,
+                                brm_function,perc_repair,n_iterations,n_particles,n_vars,
+                                up_bounds,low_bounds,fitness_function, direct_repair, show_particle_graphics)
+            exec_times[nr] = time.time() - i_time
+            if verbose:
+                print("Number of trial =", nr+1, "... Fitness Value = ", fitness_value[nr])
+            plt.show()
+    else:
+        pool = mp.Pool(mp.cpu_count())
+        result = []
+        for nr in range(n_trials):
+            i_time = time.time()
+            result.append(pool.apply_async(PSO_alg, args=(wmax,wmin,c1min,c1max,c2min,c2max,initial_solution,
+                                    brm_function,perc_repair,n_iterations,n_particles,n_vars,
+                                    up_bounds,low_bounds,fitness_function, direct_repair, show_particle_graphics)))
+            exec_times[nr] = time.time() - i_time
+        pool.close()
+        pool.join()
+        for nr in range(n_trials):
+            fitness_value[nr],it_fitness_value[nr],solution[nr] = result[nr].get()
+            if verbose:
+                print("Number of trial =", nr+1, "... Fitness Value = ", fitness_value[nr])
     mean = np.mean(it_fitness_value, axis=0)
     std = np.std(it_fitness_value,axis=0)
     if show_fitness_grapic:
