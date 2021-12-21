@@ -313,7 +313,7 @@ def PSO_alg(wmax,wmin,c1min,c1max,c2min,c2max,initial_solution,brm_function,perc
         #Update position
         for i in range(n_particles):
             # new volocity calculation
-            new_velocity = (W*velocity_vector[i]) + (c1*random.random()) * (pbest_position[i] - particle_position_vector[i]) + (c2*random.random()) * (gbest_position-particle_position_vector[i])
+            new_velocity = (W*velocity_vector[i]) + (c1*np.random.uniform(VelMax[i])) * (pbest_position[i] - particle_position_vector[i]) + (c2*np.random.uniform(VelMax[i])) * (gbest_position-particle_position_vector[i])
             # Apply velocity limits
             new_velocity=np.minimum(new_velocity, VelMax[i])
             new_velocity=np.maximum(new_velocity, VelMin[i])
@@ -321,11 +321,11 @@ def PSO_alg(wmax,wmin,c1min,c1max,c2min,c2max,initial_solution,brm_function,perc
             new_position = new_velocity + particle_position_vector[i]
             velocity_vector[i] = new_velocity
             # Velocity Mirror Effect
-            IsOutside_low=(new_position<low_bounds[i])
-            IsOutside_up=(new_position>up_bounds[i])
-            IsOutside=np.array(IsOutside_low|IsOutside_up)
-            velocity=np.array([new_velocity[j]*-1*IsOutside[j]+new_velocity[j]*(1-IsOutside[j]) for j in range(n_vars)])
-            new_velocity=velocity
+            #IsOutside_low=(new_position<low_bounds[i])
+            #IsOutside_up=(new_position>up_bounds[i])
+            #IsOutside=np.array(IsOutside_low|IsOutside_up)
+            #velocity=np.array([new_velocity[j]*-1*IsOutside[j]+new_velocity[j]*(1-IsOutside[j]) for j in range(n_vars)])
+            #new_velocity=velocity
             #Apply Position Limits Boundary Control
             position,penalty = brm_function(new_position,low_bounds[i],up_bounds[i])
             # update position
