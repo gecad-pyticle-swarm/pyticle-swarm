@@ -1,4 +1,3 @@
-from multiprocessing.pool import ApplyResult
 import numpy as np 
 import matplotlib.pyplot as plt
 import numpy.matlib
