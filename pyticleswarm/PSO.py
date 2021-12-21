@@ -103,7 +103,7 @@ def velocity_limits_update(low_bounds,up_bounds,n_vars,n_particles,iteration,n_i
         The maximum and minimum velocity
     """
 
-    f=0.5-((0.3-0.1)/n_iterations)*iteration
+    f=0.5-((0.5-0.01)/n_iterations)*iteration
     VelMax=np.array([[f*(up_bounds[j,i]-low_bounds[j,i]) for i in range(n_vars)] for j in range(n_particles)])
     VelMin=-VelMax
     return VelMax,VelMin
@@ -313,7 +313,7 @@ def PSO_alg(wmax,wmin,c1min,c1max,c2min,c2max,initial_solution,brm_function,perc
         #Update position
         for i in range(n_particles):
             # new volocity calculation
-            new_velocity = (W*velocity_vector[i]) + (c1*np.random.uniform(VelMax[i])) * (pbest_position[i] - particle_position_vector[i]) + (c2*np.random.uniform(VelMax[i])) * (gbest_position-particle_position_vector[i])
+            new_velocity = (W*velocity_vector[i]) + (c1*np.random.uniform()) * (pbest_position[i] - particle_position_vector[i]) + (c2*np.random.uniform()) * (gbest_position-particle_position_vector[i])
             # Apply velocity limits
             new_velocity=np.minimum(new_velocity, VelMax[i])
             new_velocity=np.maximum(new_velocity, VelMin[i])
