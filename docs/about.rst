@@ -53,3 +53,8 @@ Pyticle Swarm was developed at GECAD - Research Group on Intelligent Engineering
 .. image:: gecad.png
 		:width: 20em
 		:align: center 
+
+.. toctree::
+    :maxdepth: 2
+
+    CHANGELOG
