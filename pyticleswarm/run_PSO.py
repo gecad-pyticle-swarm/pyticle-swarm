@@ -169,9 +169,10 @@ def run_pso(n_vars, fitness_function, low_bounds, up_bounds, initial_solution=[]
 
     n = np.argmin(fitness_value)
     if verbose:
-        print(f"Best fitness value is {fitness_value[n]} found in run {n+1}")
-        print(f"Average fitness_value: {np.mean(fitness_value)}")
-        print(f"Standard deviation: {np.std(fitness_value)}")
-        print(f"Execution time: {np.sum(exec_times)}")
+        print(f"Best fitness value is {fitness_value[n]:.6e} found in run {n+1}")
+        print(f"Average fitness_value: {np.mean(fitness_value):.6e}")
+        print(f"Standard deviation: {np.std(fitness_value):.6e}")
+        print(f"Execution time: {np.sum(exec_times):.2e}")
+        numpy.set_printoptions(precision=6)
         print(f"Solution: {solution[n]}")
     return Res(fitness_value[n], it_fitness_value, solution[n], exec_times[n])
