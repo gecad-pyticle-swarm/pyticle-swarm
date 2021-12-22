@@ -17,9 +17,9 @@ sys.path.insert(0, os.path.abspath('..'))
 
 # -- Project information -----------------------------------------------------
 
-project = 'PSO'
+project = 'Pyticle Swarm'
 copyright = '2021, GECAD'
-author = 'GECAD - Bruno Veiga, Ricardo Faia, Tiago Pinto, Zita Vale'
+author = 'Bruno Veiga, Ricardo Faia, Tiago Pinto, Zita Vale'
 
 
 # -- General configuration ---------------------------------------------------
