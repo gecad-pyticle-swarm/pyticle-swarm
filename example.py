@@ -48,10 +48,10 @@ n_trials                = 30    The total number of trials
 show_fitness_graphic    = False Boolean that indicates if the fitness graphic is to be shown or not
 show_particle_graphics  = False Boolean that indicates if the particles graphics are to be shown or not (Only works with solutions of 2 dimensions)
 """
-
-# Run PSO
-res = run_pso(n_vars, fitness_function=func, low_bounds=low_bounds, up_bounds= up_bounds, c1min = 0.4, c1max = 0.6, c2min = 0.4, 
-            c2max = 0.6, wmax = 0.6, wmin = 0.4, n_iterations=100,n_particles=100, brm_function=4, show_fitness_grapic=True)
+if __name__ == '__main__':
+    # Run PSO
+    res = run_pso(n_vars, fitness_function=func, low_bounds=low_bounds, up_bounds= up_bounds, c1min = 0.4, c1max = 0.6, c2min = 0.4, 
+                c2max = 0.6, wmax = 0.6, wmin = 0.4, n_iterations=100,n_particles=100, brm_function=4, show_fitness_grapic=True)
 
 # Print results
 """
