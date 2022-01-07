@@ -130,7 +130,7 @@ def BRM_control_bounce_back(new_position,low_bounds,up_bounds):
 
     # Bounce Back update
     position=np.minimum(new_position, up_bounds)
-    position=np.maximum(new_position, low_bounds)    
+    position=np.maximum(position, low_bounds)    
     return position, 0
 
 
@@ -220,7 +220,7 @@ def BRM_control_adaptive_penalty(new_position,low_bounds,up_bounds):
         elif new_position[i]<low_bounds[i]:
             penalty+= (low_bounds[i] - new_position[i])
             quantity+=1
-    return new_position, (penalty*quantity*100)
+    return new_position, (penalty*quantity*10000)
 
 
 def PSO_alg(wmax,wmin,c1min,c1max,c2min,c2max,initial_solution,brm_function,perc_repair,
@@ -245,7 +245,7 @@ def PSO_alg(wmax,wmin,c1min,c1max,c2min,c2max,initial_solution,brm_function,perc
         initial_solution: matrix or array
             Matrix or array containing the initial solutions or solution
         brm_function: function
-            Function to handle boundary constraint violation. One of: BRM_control_bounce_back, BRM_control_random_reinitialization, BRM_control_brick_wall_penalty, BRM_control_adaptive_penalty or a custom one created by the user. 
+            Function to handle boundary constraint violation. One of: BRM_control_brick_wall_penalty (1), BRM_control_adaptive_penalty (2), BRM_control_random_reinitialization (3), BRM_control_bounce_back (4), or a custom one created by the user. 
         perc_repair: float
             Value between 0 and 1 that determines the percentage of iterations starting from the end where a repair function is applied
         n_iterations: int

@@ -26,10 +26,10 @@ def run_pso(n_vars, fitness_function, low_bounds, up_bounds, initial_solution=[]
             Matrix or array containing the initial solutions or solution
         brm_function: function
             Function to handle boundary constraint violation. One of: 
-                - BRM_control_bounce_back
-                - BRM_control_random_reinitialization
-                - BRM_control_brick_wall_penalty
-                - BRM_control_adaptive_penalty
+                - BRM_control_brick_wall_penalty (1)
+                - BRM_control_adaptive_penalty (2)
+                - BRM_control_random_reinitialization (3)
+                - BRM_control_bounce_back (4)
                 - Custom one created by the user
         direct_repair: function
             The direct repair function

@@ -1,6 +1,13 @@
 Change Log
 =============
 
+[1.0.4]- 07/01/2022
+-------------------
+
+- [FIX] Corrected boundary control function: random reinitialization
+- [FIX] Corrected boundary control function: adaptive penalty
+- [CHANGED] Changed documentation regarding the boundary control function parameter
+
 [1.0.3]- 22/12/2021
 -------------------
 

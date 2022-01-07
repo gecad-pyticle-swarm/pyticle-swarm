@@ -30,6 +30,8 @@ To try the example given in [github](https://github.com/gecad-pyticle-swarm/pyti
     
     $ python example.py
 
+[CHANGELOG](https://github.com/gecad-pyticle-swarm/pyticle-swarm/blob/master/docs/CHANGELOG.rst)
+
 Pyticle Swarm was developed at GECAD - Research Group on Intelligent Engineering and Computing for Advanced Innovation and Development by:
 * Bruno Veiga - btsve@isep.ipp.pt
 * Ricardo Faia -  rfmfa@isep.ipp.pt
@@ -37,5 +39,4 @@ Pyticle Swarm was developed at GECAD - Research Group on Intelligent Engineering
 * Zita Vale - zav@isep.ipp.pt
 
 ![gecad.png](https://github.com/gecad-pyticle-swarm/pyticle-swarm/raw/master/gecad.png)
-
 
