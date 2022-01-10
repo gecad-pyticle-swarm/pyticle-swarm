@@ -24,12 +24,17 @@ To activate the anaconda environment execute:
 
     $ conda activate {name_of_environment}
 
-
 To install the library simply run:
 
 .. code-block:: console
 
     $ pip install pyticle-swarm
+
+To upgrade the library run:
+
+.. code-block:: console
+
+    $ pip install pyticle-swarm -U
 
 To import the library and the PSO algorithm:
 

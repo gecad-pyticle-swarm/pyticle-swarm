@@ -23,6 +23,10 @@ To install the library simply run:
 
     $ pip install pyticle-swarm
 
+To upgrade the library run:
+
+    $ pip install pyticle-swarm -U
+
 To import the library and the PSO algorithm:
 
     from pyticleswarm import run_pso
