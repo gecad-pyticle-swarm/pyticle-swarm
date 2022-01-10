@@ -10,6 +10,7 @@ The library has dependencies on the following packages:
 * numpy
 * matplotlib
 * matplotlib-inline
+* joblib
 
 To create an anaconda environment run:
 

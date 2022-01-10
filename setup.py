@@ -11,7 +11,7 @@ with open(path.join(HERE, 'README.md'), encoding='utf-8') as f:
 
 setup(
     name="Pyticle-Swarm",
-    version="1.0.4",
+    version="1.0.5",
     description="PSO library",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -29,6 +29,7 @@ setup(
     install_requires=[
         "numpy==1.21.3",
         "matplotlib==3.4.3",
-        "matplotlib-inline==0.1.3"
+        "matplotlib-inline==0.1.3",
+        "joblib==1.1.0"
     ]
 )

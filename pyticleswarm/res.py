@@ -9,11 +9,13 @@ class Res:
             All the fitness values of each execution after running the PSO algorithm
         solution: array of floats
             The solution of the best execution corresponding to the best fitness value
-        exec_time: float
-            Execution times of the best execution of the PSO algorithm
+        tot_exec_time: float
+            Total execution time of the PSO algorithm
+        avg_exec_time: float
+            Average execution time of the PSO algorithm
     """
 
-    def __init__(self,fitness_value,it_fitness_value,solution,exec_time):
+    def __init__(self,fitness_value,it_fitness_value,solution,tot_exec_time,avg_exec_time):
         """
         Parameters:
             fitness_value: float
@@ -22,11 +24,14 @@ class Res:
                 All the fitness values of each execution after running the PSO algorithm
             solution: array of floats
                 The solution of the best execution corresponding to the best fitness value
-            exec_time: float
-                Execution times of the best execution of the PSO algorithm
+            tot_exec_time: float
+                Total execution time of the PSO algorithm
+            avg_exec_time: float
+                Average execution time of the PSO algorithm
         """
 
         self.fitness_value = fitness_value
         self.it_fitness_value = it_fitness_value
         self.solution = solution
-        self.exec_times = exec_time
+        self.tot_exec_time = tot_exec_time
+        self.avg_exec_time = avg_exec_time

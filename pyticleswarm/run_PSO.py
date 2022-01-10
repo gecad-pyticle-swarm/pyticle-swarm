@@ -4,10 +4,10 @@ import numpy.matlib
 from .res import Res
 from .PSO import PSO_alg
 import time
-import multiprocessing as mp
+from joblib import Parallel, delayed
 
 
-def run_pso(n_vars, fitness_function, low_bounds, up_bounds, initial_solution=[],brm_function = 4,direct_repair=None,
+def run_pso(n_vars, fitness_function, low_bounds, up_bounds, initial_solution=[],brm_function = 4,n_jobs=-2,direct_repair=None,
             perc_repair=0,wmax = 0.5,wmin = 0.1,c1min = 0,c1max = 0.4,c2min = 0.1,c2max = 2,n_iterations = 100,
             n_particles = 10,n_trials = 30, show_fitness_grapic=False, show_particle_graphics=False, verbose=True):
     """
@@ -31,6 +31,12 @@ def run_pso(n_vars, fitness_function, low_bounds, up_bounds, initial_solution=[]
                 - BRM_control_random_reinitialization (3)
                 - BRM_control_bounce_back (4)
                 - Custom one created by the user
+        n_jobs: int
+            Number of concurrently running jobs: 
+                - For the value -1 all CPUs are used. 
+                - For the value 1 there is no parallel processing.
+                - For values below -1, the number of CPUs used is given by (n_cpus + 1 + n_jobs).
+                - For any other positive values, the number given is the number of CPUs used.
         direct_repair: function
             The direct repair function
         perc_repair: float
@@ -143,18 +149,14 @@ def run_pso(n_vars, fitness_function, low_bounds, up_bounds, initial_solution=[]
                 print("Number of trial =", nr+1, "... Fitness Value = ", fitness_value[nr])
             plt.show()
     else:
-        pool = mp.Pool(mp.cpu_count())
-        result = []
+        i_time = time.time()
+        parallel = Parallel(n_jobs=n_jobs)
+        result = parallel(delayed(PSO_alg)(wmax,wmin,c1min,c1max,c2min,c2max,initial_solution,
+                                brm_function,perc_repair,n_iterations,n_particles,n_vars,
+                                up_bounds,low_bounds,fitness_function, direct_repair, show_particle_graphics) for _ in range(n_trials))
+        exec_times = time.time() - i_time
         for nr in range(n_trials):
-            i_time = time.time()
-            result.append(pool.apply_async(PSO_alg, args=(wmax,wmin,c1min,c1max,c2min,c2max,initial_solution,
-                                    brm_function,perc_repair,n_iterations,n_particles,n_vars,
-                                    up_bounds,low_bounds,fitness_function, direct_repair, show_particle_graphics)))
-            exec_times[nr] = time.time() - i_time
-        pool.close()
-        pool.join()
-        for nr in range(n_trials):
-            fitness_value[nr],it_fitness_value[nr],solution[nr] = result[nr].get()
+            fitness_value[nr],it_fitness_value[nr],solution[nr] = result[nr]
             if verbose:
                 print("Number of trial =", nr+1, "... Fitness Value = ", fitness_value[nr])
     mean = np.mean(it_fitness_value, axis=0)
@@ -172,7 +174,9 @@ def run_pso(n_vars, fitness_function, low_bounds, up_bounds, initial_solution=[]
         print(f"Best fitness value is {fitness_value[n]:.6e} found in run {n+1}")
         print(f"Average fitness_value: {np.mean(fitness_value):.6e}")
         print(f"Standard deviation: {np.std(fitness_value):.6e}")
-        print(f"Execution time: {np.sum(exec_times):.2e}")
+        print(f"Total execution time: {np.sum(exec_times):.2e}")
+        print(f"Average execution time: {np.sum(exec_times)/n_trials:.2e}")
         numpy.set_printoptions(precision=6)
         print(f"Solution: {solution[n]}")
-    return Res(fitness_value[n], it_fitness_value, solution[n], exec_times[n])
+    #current_process().t
+    return Res(fitness_value[n], it_fitness_value, solution[n], np.sum(exec_times), np.sum(exec_times)/n_trials)

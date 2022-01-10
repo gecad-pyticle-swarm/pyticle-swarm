@@ -1,6 +1,14 @@
 Change Log
 =============
 
+[1.0.5]- 10/01/2022
+-------------------
+
+- [ADDED] Users may now indicate the number of jobs for multiprocessing
+- [ADDED] The results of the PSO now show the total and the average execution times of the algorithm
+- [CHANGED] Multiprocessing of the trials of the PSO no longer requires "if __name__ == '__main__':" in the main module to work
+- [CHANGED] New dependency added: joblib
+
 [1.0.4]- 07/01/2022
 -------------------
 
@@ -19,9 +27,9 @@ Change Log
 [1.0.2]- 20/12/2021
 -------------------
 
-- [CHANGED] Name of some variables according to literature.
-- [CHANGED] Presentation of the results of the PSO.
-- [FIX] Corrected some names presented in the documentation.
+- [CHANGED] Name of some variables according to literature
+- [CHANGED] Presentation of the results of the PSO
+- [FIX] Corrected some names presented in the documentation
  
 [1.0.1]- 20/12/2021
 -------------------
