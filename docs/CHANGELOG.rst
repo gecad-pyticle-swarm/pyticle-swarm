@@ -1,6 +1,12 @@
 Change Log
 =============
 
+[1.0.6]- 12/01/2022
+-------------------
+
+- [FIX] Corrected cases where the solution was not updated after the direct repair function
+- [CHANGE] Changed the percentage repair variable influence to be in line with its description
+
 [1.0.5]- 10/01/2022
 -------------------
 

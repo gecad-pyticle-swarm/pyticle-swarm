@@ -8,7 +8,7 @@ from joblib import Parallel, delayed
 
 
 def run_pso(n_vars, fitness_function, low_bounds, up_bounds, initial_solution=[],brm_function = 4,n_jobs=-2,direct_repair=None,
-            perc_repair=0,wmax = 0.5,wmin = 0.1,c1min = 0,c1max = 0.4,c2min = 0.1,c2max = 2,n_iterations = 100,
+            perc_repair=0.1,wmax = 0.5,wmin = 0.1,c1min = 0,c1max = 0.4,c2min = 0.1,c2max = 2,n_iterations = 100,
             n_particles = 10,n_trials = 30, show_fitness_grapic=False, show_particle_graphics=False, verbose=True):
     """
     Function to execute the pso algorithm
@@ -142,7 +142,7 @@ def run_pso(n_vars, fitness_function, low_bounds, up_bounds, initial_solution=[]
         for nr in range(n_trials):
             i_time = time.time()
             fitness_value[nr],it_fitness_value[nr],solution[nr] =PSO_alg(wmax,wmin,c1min,c1max,c2min,c2max,initial_solution,
-                                brm_function,perc_repair,n_iterations,n_particles,n_vars,
+                                brm_function,(1-perc_repair),n_iterations,n_particles,n_vars,
                                 up_bounds,low_bounds,fitness_function, direct_repair, show_particle_graphics)
             exec_times[nr] = time.time() - i_time
             if verbose:
@@ -152,7 +152,7 @@ def run_pso(n_vars, fitness_function, low_bounds, up_bounds, initial_solution=[]
         i_time = time.time()
         parallel = Parallel(n_jobs=n_jobs)
         result = parallel(delayed(PSO_alg)(wmax,wmin,c1min,c1max,c2min,c2max,initial_solution,
-                                brm_function,perc_repair,n_iterations,n_particles,n_vars,
+                                brm_function,(1-perc_repair),n_iterations,n_particles,n_vars,
                                 up_bounds,low_bounds,fitness_function, direct_repair, show_particle_graphics) for _ in range(n_trials))
         exec_times = time.time() - i_time
         for nr in range(n_trials):

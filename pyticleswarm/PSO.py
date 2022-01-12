@@ -337,7 +337,6 @@ def PSO_alg(wmax,wmin,c1min,c1max,c2min,c2max,initial_solution,brm_function,perc
                     particle_position_vector[i]=new_position
             # calculate new fitness
             fitness_cadidate[i] = fitness_function(particle_position_vector[i]) + penalty
-            particle_position_vector[i] = position
             if(pbest_fitness_value[i] > fitness_cadidate[i]):
                 pbest_fitness_value[i] = fitness_cadidate[i]
                 pbest_position[i] = particle_position_vector[i]
