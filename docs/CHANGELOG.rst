@@ -1,6 +1,12 @@
 Change Log
 =============
 
+[1.0.7]- 14/01/2022
+-------------------
+
+- [FIX] Small correction done for when the perc_repair = 1
+- [FIX] Corrected penalty value after a direct repair function when the brm_function is 1 or 2.
+
 [1.0.6]- 12/01/2022
 -------------------
 

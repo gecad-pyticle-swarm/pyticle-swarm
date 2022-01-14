@@ -291,6 +291,13 @@ def PSO_alg(wmax,wmin,c1min,c1max,c2min,c2max,initial_solution,brm_function,perc
     for i in range(n_particles):
         #Apply Position Limits Boundary Control
         particle_position_vector[i], penalty=brm_function(particle_position_vector[i],low_bounds[i],up_bounds[i])
+        if direct_repair != None:
+            if perc_repair==1:
+                # Direct Repair 
+                new_position=direct_repair(particle_position_vector[i])
+                particle_position_vector[i]=new_position
+                if brm_function==1 or brm_function ==2:
+                        particle_position_vector[i],penalty = brm_function(particle_position_vector[i],low_bounds[i],up_bounds[i])
         fitness_cadidate[i] = fitness_function(particle_position_vector[i]) + penalty
 
     pbest_position = particle_position_vector.copy()
@@ -335,6 +342,8 @@ def PSO_alg(wmax,wmin,c1min,c1max,c2min,c2max,initial_solution,brm_function,perc
                     # Direct Repair 
                     new_position=direct_repair(particle_position_vector[i])
                     particle_position_vector[i]=new_position
+                    if brm_function == 1 or brm_function ==2:
+                        particle_position_vector[i],penalty = brm_function(particle_position_vector[i],low_bounds[i],up_bounds[i])
             # calculate new fitness
             fitness_cadidate[i] = fitness_function(particle_position_vector[i]) + penalty
             if(pbest_fitness_value[i] > fitness_cadidate[i]):
