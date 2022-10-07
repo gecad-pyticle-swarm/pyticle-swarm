@@ -33,8 +33,10 @@ up_bounds = 5.12
 Stantard parameters values:
 
 initial_solution        = []    Matrix or array containing the initial solutions or solution
-brm_function            = 4     Function to handle boundary constraint violation.
-n_jobs                  = -2    Number of concurrently running jobs.
+generate_int_pop        = 1     Type of initial population generation
+brm_function            = 4     Function to handle boundary constraint violation
+penalty                 = 10    Brick wall penalty value or adaptive penalty offset
+n_jobs                  = -2    Number of concurrently running jobs
 direct_repair           = None  The direct repair function
 perc_repair             = 0     Value between 0 and 1 that determines the percentage of iterations starting from the end where a repair function is applied
 wmax                    = 0.5   The maximum value of the inertia weight
@@ -50,8 +52,8 @@ show_fitness_graphic    = False Boolean that indicates if the fitness graphic is
 show_particle_graphics  = False Boolean that indicates if the particles graphics are to be shown or not (Only works with solutions of 2 dimensions)
 """
 # Run PSO
-res = run_pso(n_vars, fitness_function=func, low_bounds=low_bounds, up_bounds= up_bounds, c1min = 0.4, c1max = 0.6, c2min = 0.4,n_jobs=-2, 
-            c2max = 0.6, wmax = 0.6, wmin = 0.4, n_iterations=100,n_particles=100, brm_function=4, show_fitness_grapic=True)
+res = run_pso(n_vars, fitness_function=func, low_bounds=low_bounds, up_bounds= up_bounds, c1min = 0.4, c1max = 0.6, c2min = 0.4, generate_int_pop=1,penalty=1000000,
+            c2max = 0.6, wmax = 0.6, wmin = 0.4, n_iterations=100,n_particles=100, brm_function=4, show_fitness_grapic=True,n_jobs=-2, )
 
 # Print results
 """

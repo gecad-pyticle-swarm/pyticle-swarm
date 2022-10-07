@@ -7,7 +7,7 @@ import warnings
 
 
 #Algorithm Functions
-def generat_int_pop(n_particles,n_vars,low_bounds,up_bounds):
+def generate_int_pop_rand(n_particles,n_vars,low_bounds,up_bounds):
     """
     Generate initial population function.
     Here, random values between the lower and the higer bounds are defined for the initial population:
@@ -29,6 +29,30 @@ def generat_int_pop(n_particles,n_vars,low_bounds,up_bounds):
     """
 
     particle_position_vector=np.array([[np.random.uniform(low_bounds[j,i],up_bounds[j,i]) for i in range(n_vars)] for j in range(n_particles)], dtype=float)
+    return particle_position_vector
+
+
+def generate_int_pop_mean(n_particles,n_vars,low_bounds,up_bounds):
+    """
+    Generate initial population function.
+    Here, the mean value between the low and the up bounds are defined for the initial solution:
+    
+    x1^j = (xlb^j+xub^j)/2
+
+    Parameters:
+        n_particles: int
+            Number of particles
+        n_vars: int
+            Number of variables
+        low_bounds: matrix
+            Matrix containing the lowest boundaries the solution array might have for each particle
+        up_bounds: matrix
+            Matrix containing the highest boundaries the solution array might have for each particle
+    
+    Returns: matrix
+        Matrix containing the initial population values for each particle
+    """
+    particle_position_vector=np.array([[(low_bounds[j,i]+up_bounds[j,i])/2 for i in range(n_vars)] for j in range(n_particles)], dtype=float)
     return particle_position_vector
 
 
@@ -109,7 +133,7 @@ def velocity_limits_update(low_bounds,up_bounds,n_vars,n_particles,iteration,n_i
     return VelMax,VelMin
 
 
-def BRM_control_bounce_back(new_position,low_bounds,up_bounds):
+def BRM_control_bounce_back(new_position,low_bounds,up_bounds,_):
     """
     Bondary control function (Bounce back)
     Relocates the parameter in between the bound it exceeded and the corresponding parameter from the base vector [1].
@@ -134,7 +158,7 @@ def BRM_control_bounce_back(new_position,low_bounds,up_bounds):
     return position, 0
 
 
-def BRM_control_random_reinitialization(new_position,low_bounds,up_bounds):
+def BRM_control_random_reinitialization(new_position,low_bounds,up_bounds,_):
     """
     Bondary control function (Random Reinicialization).
     Replaces a parameter that exceeds its bounds by a randomly chosen value from within the allowed range following [2], [1].
@@ -163,7 +187,7 @@ def BRM_control_random_reinitialization(new_position,low_bounds,up_bounds):
     return position, 0
 
 
-def BRM_control_brick_wall_penalty(new_position,low_bounds,up_bounds):
+def BRM_control_brick_wall_penalty(new_position,low_bounds,up_bounds,custom_penalty):
     """
     Bondary control function (Brick wall penalty).
     If any parameter of a vector falls beyond the pre-defined lower or upper bounds, objective function value of the vector is made high enough (by afixed big number) to guarantee that it never gets selected [1].
@@ -177,6 +201,8 @@ def BRM_control_brick_wall_penalty(new_position,low_bounds,up_bounds):
             Array containing the lowest boundaries the solution array might have for one particle
         up_bounds: array
             Array containing the highest boundaries the solution array might have for one particle
+        custom_penalty: float
+            Penalty value to be applied
 
     Returns: array
         The new solution array after checking if solution values are within the boundaries
@@ -185,11 +211,11 @@ def BRM_control_brick_wall_penalty(new_position,low_bounds,up_bounds):
     # Brick wall penalty
     for i in range(len(new_position)):
         if new_position[i]>up_bounds[i] or new_position[i]<low_bounds[i]:
-            return new_position, 1000000
+            return new_position, custom_penalty
     return new_position, 0
 
 
-def BRM_control_adaptive_penalty(new_position,low_bounds,up_bounds):
+def BRM_control_adaptive_penalty(new_position,low_bounds,up_bounds, custom_penalty):
     """
     Bondary control function (Brick wall penalty)
     Similar to brick wall penalty, but here the increase in the objective function value of the offender vector may depend on the number of parameters violating bound constraints and their magnitudes of violation [3], [4].
@@ -205,6 +231,8 @@ def BRM_control_adaptive_penalty(new_position,low_bounds,up_bounds):
             Array containing the lowest boundaries the solution array might have for one particle
         up_bounds: array
             Array containing the highest boundaries the solution array might have for one particle
+        custom_penalty:
+            Penalty offset to be used within the adaptive penalty formula
 
     Returns: array
         The new solution array after checking if solution values are within the boundaries
@@ -220,10 +248,10 @@ def BRM_control_adaptive_penalty(new_position,low_bounds,up_bounds):
         elif new_position[i]<low_bounds[i]:
             penalty+= (low_bounds[i] - new_position[i])
             quantity+=1
-    return new_position, (penalty*quantity*10000)
+    return new_position, (penalty*quantity*custom_penalty)
 
 
-def PSO_alg(wmax,wmin,c1min,c1max,c2min,c2max,initial_solution,brm_function,perc_repair,
+def PSO_alg(wmax,wmin,c1min,c1max,c2min,c2max,initial_solution,initial_population_gen,brm_function,custom_penalty,perc_repair,
                        n_iterations,n_particles,n_vars,
                        up_bounds,low_bounds,fitness_function,direct_repair, show_graphics):
     """
@@ -244,6 +272,8 @@ def PSO_alg(wmax,wmin,c1min,c1max,c2min,c2max,initial_solution,brm_function,perc
             Maximum value of the acceleration coefficient c1
         initial_solution: matrix or array
             Matrix or array containing the initial solutions or solution
+        initial_population_gen: int
+            Defines the type of the initial population. One of: generate_int_pop_rand (1), generate_int_pop_mean (2)
         brm_function: function
             Function to handle boundary constraint violation. One of: BRM_control_brick_wall_penalty (1), BRM_control_adaptive_penalty (2), BRM_control_random_reinitialization (3), BRM_control_bounce_back (4), or a custom one created by the user. 
         perc_repair: float
@@ -268,7 +298,7 @@ def PSO_alg(wmax,wmin,c1min,c1max,c2min,c2max,initial_solution,brm_function,perc
     Returns: float, matrix, array
         The best fitness value, all fitness values and the solution array
     """
-    
+    np.random.seed(10)
     # Create Variables
     particle_position_vector=np.array([[float('inf') for _ in range(n_vars)] for _ in range(n_particles)])
     pbest_position=np.array([[float('inf') for _ in range(n_vars)] for _ in range(n_particles)])
@@ -285,19 +315,21 @@ def PSO_alg(wmax,wmin,c1min,c1max,c2min,c2max,initial_solution,brm_function,perc
     if len(initial_solution) == n_particles:
         particle_position_vector = initial_solution
     elif len(initial_solution) == 1:
-        particle_position_vector = np.concatenate((generat_int_pop(n_particles-1,n_vars,low_bounds,up_bounds),initial_solution))
+        generate_int_pop = generate_int_pop_rand if initial_population_gen==1 else generate_int_pop_mean
+        particle_position_vector = np.concatenate((generate_int_pop(n_particles-1,n_vars,low_bounds,up_bounds),initial_solution))
     else:
-        particle_position_vector = generat_int_pop(n_particles,n_vars,low_bounds,up_bounds)
+        generate_int_pop = generate_int_pop_rand if initial_population_gen==1 else generate_int_pop_mean
+        particle_position_vector = generate_int_pop(n_particles,n_vars,low_bounds,up_bounds)
     for i in range(n_particles):
         #Apply Position Limits Boundary Control
-        particle_position_vector[i], penalty=brm_function(particle_position_vector[i],low_bounds[i],up_bounds[i])
+        particle_position_vector[i], penalty=brm_function(particle_position_vector[i],low_bounds[i],up_bounds[i],custom_penalty)
         if direct_repair != None:
             if perc_repair==1:
                 # Direct Repair 
                 new_position=direct_repair(particle_position_vector[i])
                 particle_position_vector[i]=new_position
                 if brm_function==1 or brm_function ==2:
-                        particle_position_vector[i],penalty = brm_function(particle_position_vector[i],low_bounds[i],up_bounds[i])
+                        particle_position_vector[i],penalty = brm_function(particle_position_vector[i],low_bounds[i],up_bounds[i],custom_penalty)
         fitness_cadidate[i] = fitness_function(particle_position_vector[i]) + penalty
 
     pbest_position = particle_position_vector.copy()
@@ -334,7 +366,7 @@ def PSO_alg(wmax,wmin,c1min,c1max,c2min,c2max,initial_solution,brm_function,perc
             #velocity=np.array([new_velocity[j]*-1*IsOutside[j]+new_velocity[j]*(1-IsOutside[j]) for j in range(n_vars)])
             #new_velocity=velocity
             #Apply Position Limits Boundary Control
-            position,penalty = brm_function(new_position,low_bounds[i],up_bounds[i])
+            position,penalty = brm_function(new_position,low_bounds[i],up_bounds[i],custom_penalty)
             # update position
             particle_position_vector[i] = position
             if direct_repair != None:
@@ -343,7 +375,7 @@ def PSO_alg(wmax,wmin,c1min,c1max,c2min,c2max,initial_solution,brm_function,perc
                     new_position=direct_repair(particle_position_vector[i])
                     particle_position_vector[i]=new_position
                     if brm_function == 1 or brm_function ==2:
-                        particle_position_vector[i],penalty = brm_function(particle_position_vector[i],low_bounds[i],up_bounds[i])
+                        particle_position_vector[i],penalty = brm_function(particle_position_vector[i],low_bounds[i],up_bounds[i],custom_penalty)
             # calculate new fitness
             fitness_cadidate[i] = fitness_function(particle_position_vector[i]) + penalty
             if(pbest_fitness_value[i] > fitness_cadidate[i]):

@@ -5,10 +5,11 @@ from .res import Res
 from .PSO import PSO_alg
 import time
 from joblib import Parallel, delayed
+import warnings
 
 
-def run_pso(n_vars, fitness_function, low_bounds, up_bounds, initial_solution=[],brm_function = 4,n_jobs=-2,direct_repair=None,
-            perc_repair=0.1,wmax = 0.5,wmin = 0.1,c1min = 0,c1max = 0.4,c2min = 0.1,c2max = 2,n_iterations = 100,
+def run_pso(n_vars, fitness_function, low_bounds, up_bounds, initial_solution=[],generate_int_pop=1,brm_function = 4,penalty=1000000,n_jobs=-2,direct_repair=None,
+            perc_repair=0.1,w=None,wmax = 0.7,wmin = 0.7,c1=None,c1min = 1.0,c1max = 1.0,c2=None,c2min = 1.0,c2max = 1.0,n_iterations = 100,
             n_particles = 10,n_trials = 30, show_fitness_grapic=False, show_particle_graphics=False, verbose=True):
     """
     Function to execute the pso algorithm
@@ -24,6 +25,10 @@ def run_pso(n_vars, fitness_function, low_bounds, up_bounds, initial_solution=[]
             Matrix containing the highest boundaries the solution array might have for each particle
         initial_solution: matrix or array
             Matrix or array containing the initial solutions or solution
+        generate_int_pop: int
+            Type of population generation for the first generation:
+                - generate_int_pop_rand (1)
+                - generate_int_pop_mean (2)
         brm_function: function
             Function to handle boundary constraint violation. One of: 
                 - BRM_control_brick_wall_penalty (1)
@@ -31,6 +36,8 @@ def run_pso(n_vars, fitness_function, low_bounds, up_bounds, initial_solution=[]
                 - BRM_control_random_reinitialization (3)
                 - BRM_control_bounce_back (4)
                 - Custom one created by the user
+        penalty: float
+            Brick wall penalty value or adaptive penalty offset.
         n_jobs: int
             Number of concurrently running jobs: 
                 - For the value -1 all CPUs are used. 
@@ -41,14 +48,20 @@ def run_pso(n_vars, fitness_function, low_bounds, up_bounds, initial_solution=[]
             The direct repair function
         perc_repair: float
             Value between 0 and 1 that determines the percentage of iterations starting from the end where a repair function is applied
+        w: float
+            The itertia weight constant value. Alternative to using wmin and wmax.
         wmin: float
             The minimum value of the itertia weight
         wmax: float
             The maximum value of the inertia weight
+        c1: float
+            The acceleration coefficient c1 constant value. Alternative to using c1min and c1max.
         c1min: float
             Minimum value of the acceleration coefficient c1
         c1max: float
             Maximum value of the acceleration coefficient c1
+        c2: float
+            The acceleration coefficient c2 constant value. Alternative to using c2min and c2max.
         c2min: float
             Minimum value of the acceleration coefficient c2
         c2max: float
@@ -82,24 +95,46 @@ def run_pso(n_vars, fitness_function, low_bounds, up_bounds, initial_solution=[]
 
     if n_trials < 1:
         raise ValueError("n_trials must be at least be 1")
+        
+    if generate_int_pop != 1 and generate_int_pop!=2:
+        raise ValueError("Wrong generate_int_pop defined")
 
-    if c1min < 0:
-        raise ValueError("c1min must at least be 0")
+    if c1 != None:
+        if c1 < 0:
+            raise ValueError("c1 must at least be 0")
+        warnings.warn("Using fixed value of c1 instead of c1min and c1max.")
+        c1min = c1
+        c1max = c1
+    else:
+        if c1min < 0:
+            raise ValueError("c1min must at least be 0")
+        if c1max < c1min:
+            raise ValueError("c1max must have a bigger or equal value than c1min")
+        
+    if w != None:
+        if w < 0:
+            raise ValueError("w must at least be 0")
+        warnings.warn("Using fixed value of w instead of wmin and wmax.")
+        wmin = w
+        wmax = w
+    else:
+        if wmin < 0:
+            raise ValueError("wmin must at least be 0")
 
-    if c2min < 0:
-        raise ValueError("c2min must at least be 0")
+        if wmax < wmin:
+            raise ValueError("wmax must have a bigger or equal value than wmin")
 
-    if wmin < 0:
-        raise ValueError("wmin must at least be 0")
-
-    if wmax < wmin:
-        raise ValueError("wmax must have a bigger or equal value than wmin")
-
-    if c1max < c1min:
-        raise ValueError("c1max must have a bigger or equal value than c1min")
-
-    if c2max < c2min:
-        raise ValueError("c2max must have a bigger or equal value than c2min")
+    if c2 != None:
+        if c2 < 0:
+            raise ValueError("c2 must at least be 0")
+        warnings.warn("Using fixed value of c2 instead of c2min and c2max.")
+        c2min = c2
+        c2max = c2
+    else:
+        if c2min < 0:
+                raise ValueError("c2min must at least be 0")
+        if c2max < c2min:
+            raise ValueError("c2max must have a bigger or equal value than c2min")
 
     if isinstance(up_bounds, list):
         if len(up_bounds)!=n_vars:
@@ -141,8 +176,8 @@ def run_pso(n_vars, fitness_function, low_bounds, up_bounds, initial_solution=[]
     if show_particle_graphics and n_vars==2:
         for nr in range(n_trials):
             i_time = time.time()
-            fitness_value[nr],it_fitness_value[nr],solution[nr] =PSO_alg(wmax,wmin,c1min,c1max,c2min,c2max,initial_solution,
-                                brm_function,(1-perc_repair),n_iterations,n_particles,n_vars,
+            fitness_value[nr],it_fitness_value[nr],solution[nr] =PSO_alg(wmax,wmin,c1min,c1max,c2min,c2max,initial_solution,generate_int_pop,
+                                brm_function,penalty,(1-perc_repair),n_iterations,n_particles,n_vars,
                                 up_bounds,low_bounds,fitness_function, direct_repair, show_particle_graphics)
             exec_times[nr] = time.time() - i_time
             if verbose:
@@ -151,8 +186,8 @@ def run_pso(n_vars, fitness_function, low_bounds, up_bounds, initial_solution=[]
     else:
         i_time = time.time()
         parallel = Parallel(n_jobs=n_jobs)
-        result = parallel(delayed(PSO_alg)(wmax,wmin,c1min,c1max,c2min,c2max,initial_solution,
-                                brm_function,(1-perc_repair),n_iterations,n_particles,n_vars,
+        result = parallel(delayed(PSO_alg)(wmax,wmin,c1min,c1max,c2min,c2max,initial_solution,generate_int_pop,
+                                brm_function,penalty,(1-perc_repair),n_iterations,n_particles,n_vars,
                                 up_bounds,low_bounds,fitness_function, direct_repair, show_particle_graphics) for _ in range(n_trials))
         exec_times = time.time() - i_time
         for nr in range(n_trials):
