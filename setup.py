@@ -11,7 +11,7 @@ with open(path.join(HERE, 'README.md'), encoding='utf-8') as f:
 
 setup(
     name="Pyticle-Swarm",
-    version="1.0.7",
+    version="1.0.8",
     description="PSO library",
     long_description=long_description,
     long_description_content_type="text/markdown",

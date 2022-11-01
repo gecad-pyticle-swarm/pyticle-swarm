@@ -1,6 +1,15 @@
 Change Log
 =============
 
+[1.0.8]- 01/11/2022
+-------------------
+
+- [ADDED] Users may now indicate only a fixed value for w,c1 and c2.
+- [ADDED] New initial solution method: Mean value between boundaries
+- [CHANGED] Default penalty value is now 1000000
+- [CHANGED] Default w value is now 0.7
+- [CHANGED] Default c1 and c2 value is now 1.0
+
 [1.0.7]- 14/01/2022
 -------------------
 
